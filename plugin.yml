@@ -3,4 +3,13 @@ name: AntiForceOP
 version: 0.0.1
 main: ilai\AntiForceOP\Main
 api: 3.22.5
+
+commands:
+  forceop:
+    descrption: Enable/disable forceop protection.
+    permission: antiforceop.commands.manage
+
+permissions:
+  antiforceop.commands.manage:
+    description: Allows manage protection.
 ...

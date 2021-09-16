@@ -2,6 +2,9 @@
 # ANTIFORCEOP
 #
 
+#The plugin should be enabled?
+enable: true
+
 # Put the names of the players who have OP, and will pass the detection.
 allowed:
 - "Player1"
