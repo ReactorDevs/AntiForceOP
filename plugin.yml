@@ -1,0 +1,6 @@
+---
+name: AntiForceOP
+version: 0.0.1
+main: ilai\AntiForceOP\Main
+api: 3.22.5
+...

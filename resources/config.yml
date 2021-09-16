@@ -1,0 +1,14 @@
+#
+# ANTIFORCEOP
+#
+
+# Put the names of the players who have OP, and will pass the detection.
+allowed:
+- "Player1"
+- "Player2"
+
+# Disable the initial warn?
+disableInitialWarn: false
+
+# A message when we detect some player with OP who isn't regustered.
+kickMessage: "AntiForceOP Protection has detected you as a threat!\n Think this is a mistake? Contact the server owner."
