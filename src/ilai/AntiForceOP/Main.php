@@ -27,7 +27,7 @@ class Main extends PluginBase implements Listener {
     }
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool{
         // The player cannot execute comamnd if isn't registered:
-        if($this->getConfig->get("enable")) {
+        if($this->getConfig()->get("enable")) {
             $player = $sender->getPlayer();
             $playerName = $player->getName();
             $allowedPlayers = $this->getConfig()->get("allowed", []);
