@@ -12,5 +12,13 @@ use pocketmine\utils\TextFormat as C;
 use pocketmine\event\Listener;
 
 class Main extends PluginBase {
-
+    public function onEnable() {
+        $this->saveDefaultConfig();
+        $this->reloadConfig();
+        $this->getServer()->getPluginManager()->registerEvents(
+            new EventListener($this->getConfig()),
+            $this
+        );
+        $this->getLogger()->info(C::GREEN . "AntiForceOP has been enabled!");
+    }
 }
