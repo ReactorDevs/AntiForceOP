@@ -59,8 +59,7 @@ class EventListener implements Listener {
                 null,
                 "AntiForce-OP Detection"
             );
-            $ev->setMessage($this->config->get("ban-message"));
-            $ev->setCancelled(true);
+            $player->kick($this->config->get("ban-message"), false);
         }
     }
 }
