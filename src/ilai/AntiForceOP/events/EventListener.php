@@ -11,6 +11,5 @@ use pocektmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\event\Listener;
 
-class Main extends PluginBase {
-
+class EventListener extends PluginBase implements Listener {
 }
