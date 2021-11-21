@@ -56,6 +56,10 @@ class Main extends PluginBase {
 
             switch(strtolower($args[0])){
                 case "add":
+                    if(array_search($args[1], $this->getConfig()->get("allowed"))){
+                        $sender->sendMessage(C::RED . "Player already added!");
+                        return true;
+                    }
                         $allowed = $this->getConfig()->get("allowed");
                         array_push($allowed, $args[1]);
                         $this->getConfig()->set("allowed", $allowed);
@@ -64,8 +68,21 @@ class Main extends PluginBase {
                         return true;
                 break;
                 case "help":
-                    $sender->sendMessage(C::GREEN . "Usage: /fp <add> <player>");
+                    $sender->sendMessage(C::GREEN . "Usage: /fp <add/remove> <player>");
                     return true;
+                break;
+                case "remove":
+                    $search = array_search($args[1], $this->getConfig()->get("allowed"));
+                    if(!$search){
+                        $sender->sendMessage(C::RED . "Player not found!");
+                        return true;
+                    } else {
+                        $allowed = $this->getConfig()->get("allowed");
+                        array_splice($allowed, $search, 1);
+                        $this->getConfig()->set("allowed", $allowed);
+                        $sender->sendMessage(C::GREEN . "Action was done successfully.");
+                        return true;
+                    }
                 break;
             }
         }
