@@ -28,6 +28,7 @@ use pocektmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use ilai\AntiForceOP\events\EventListener;
 
 class Main extends PluginBase {
     public function onEnable() {

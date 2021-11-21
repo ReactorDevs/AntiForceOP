@@ -19,7 +19,7 @@ by the Free Software Foundation, either version 3 of the License, or
 
 declare(strict_types=1);
 
-namespace ilai\AntiForceOP;
+namespace ilai\AntiForceOP\events;
 
 use pocketmine\Server;
 use pocketmine\Player;
@@ -48,7 +48,7 @@ class EventListener implements Listener {
         }
     }
 
-    public function onCommand(PlayerCommmandEvent $ev){
+    public function onCommand(PlayerCommandEvent $ev){
         $player = $ev->getPlayer();
         $playerName = $player->getName();
         if(!in_array($playerName, $this->config->get("allowed")) && $player->isOp()){
