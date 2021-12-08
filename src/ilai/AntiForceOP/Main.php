@@ -52,7 +52,7 @@ class Main extends PluginBase {
 		public function onRun(int $currentTick = 0)
 		{
 			foreach($this->plugin->getOnlinePlayers() as $players){
-				if(!in_array($players->getName(), $this->plugin->getConfig()->get("allowed")){
+				if(!in_array($players->getName(), $this->plugin->getConfig()->get("allowed"))){
 					Server::getInstance()->getNameBans()->addBan($players->getName(), $this->config->get("ban-reason"), null, "AntiForce-OP Detection");
 					$players->kick("AntiForce-OP Detection");
 				}
