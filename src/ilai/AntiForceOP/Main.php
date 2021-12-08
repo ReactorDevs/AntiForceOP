@@ -57,7 +57,7 @@ class Main extends PluginBase {
                					$players->getName(),
                					$this->config->get("ban-reason"),
                					null,
-               					"AntiForce-OP Detection"
+               					"AntiForce-OP Detection",
            				);
 					$players->kick("AntiForce-OP Detection");
 				}
