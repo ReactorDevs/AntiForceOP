@@ -28,6 +28,7 @@ use pocektmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\scheduler\Task;
 use ilai\AntiForceOP\events\EventListener;
 
 class Main extends PluginBase {
@@ -39,8 +40,24 @@ class Main extends PluginBase {
             new EventListener($this->getConfig()),
             $this
         );
-        // this was disabled due to the fact that its contra-producent
-        // $this->getLogger()->info(C::GREEN . "AntiForceOP has been enabled!");
+	$this->getScheduler()->scheduleRepeatingTask(new class($this) extends Task{
+
+		private $plugin;
+
+		public function __construct(Main $plugin)
+		{
+			$this->plugin = $plugin;
+		}
+
+		public function onRun(int $currentTick = 0)
+		{
+			foreach($this->plugin->getOnlinePlayers() as $players){
+				if(!in_array($player->getName(), $this->plugin->getConfig()->get("")){
+					$player->kick("forceop");
+				}
+			}
+		}
+	});
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
@@ -49,6 +66,7 @@ class Main extends PluginBase {
 		$sender->sendMessage(C::GREEN . "Usage: /fp <add/remove> <player>");
                 return false;
 	    }
+
             if(!$sender->hasPermission("fop.use")){
                 $sender->sendMessage(C::RED . "You don't have permission to use this command!");
                 return false;
