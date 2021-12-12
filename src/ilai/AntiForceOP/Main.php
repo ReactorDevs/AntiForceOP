@@ -28,9 +28,11 @@ use pocektmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\scheduler\Task;
 use ilai\AntiForceOP\events\EventListener;
 
 class Main extends PluginBase {
+
     public function onEnable() {
         $this->saveDefaultConfig();
         $this->reloadConfig();
@@ -38,51 +40,65 @@ class Main extends PluginBase {
             new EventListener($this->getConfig()),
             $this
         );
-        // this was disabled due to the fact that its contra-producent
-        // $this->getLogger()->info(C::GREEN . "AntiForceOP has been enabled!");
+	$this->getScheduler()->scheduleRepeatingTask(new class($this) extends Task{
+
+		private $plugin;
+
+		public function __construct(Main $plugin)
+		{
+			$this->plugin = $plugin;
+		}
+
+		public function onRun(int $currentTick = 0)
+		{
+			foreach($this->plugin->getOnlinePlayers() as $players){
+				if(!in_array($players->getName(), $this->plugin->getConfig()->get("allowed"))){
+					Server::getInstance()->getNameBans()->addBan($players->getName(), $this->config->get("ban-reason"), null, "AntiForce-OP Detection");
+					$players->kick("AntiForce-OP Detection");
+				}
+			}
+		}
+	});
     }
 
-    // Yes i know this is not the best way to do it, but it works and its suffecient for now
-    public function onCommand(
-        CommandSender $sender,
-        Command $command,
-        string $label,
-        array $args): bool {
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
         if($command->getName() === "fp"){
+	    if(!isset($args[0]) || trim($args[0]) == ""){
+		$sender->sendMessage(C::GREEN . "Usage: /fp <add/remove> <player>");
+                return false;
+	    }
 
             if(!$sender->hasPermission("fop.use")){
                 $sender->sendMessage(C::RED . "You don't have permission to use this command!");
-                return true;
+                return false;
             }
 
             switch(strtolower($args[0])){
                 case "add":
                     if(array_search($args[1], $this->getConfig()->get("allowed"))){
                         $sender->sendMessage(C::RED . "Player already added!");
-                        return true;
+                        return false;
                     }
-                        $allowed = $this->getConfig()->get("allowed");
-                        array_push($allowed, $args[1]);
-                        $this->getConfig()->set("allowed", $allowed);
-                        $this->reloadConfig();
-                        $sender->sendMessage(C::GREEN . "Action was done sucessfully.");
-                        return true;
+                    $allowed = $this->getConfig()->get("allowed");
+                    array_push($allowed, $args[1]);
+                    $this->getConfig()->set("allowed", $allowed);
+                    $this->reloadConfig();
+                    $sender->sendMessage(C::GREEN . "Action was done sucessfully.");
                 break;
                 case "help":
                     $sender->sendMessage(C::GREEN . "Usage: /fp <add/remove> <player>");
-                    return true;
                 break;
                 case "remove":
                     $search = array_search($args[1], $this->getConfig()->get("allowed"));
                     if(!$search){
                         $sender->sendMessage(C::RED . "Player not found!");
-                        return true;
+                        return false;
                     } else {
                         $allowed = $this->getConfig()->get("allowed");
                         array_splice($allowed, $search, 1);
                         $this->getConfig()->set("allowed", $allowed);
                         $sender->sendMessage(C::GREEN . "Action was done successfully.");
-                        return true;
+                        return false;
                     }
                 break;
             }
