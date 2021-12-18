@@ -23,8 +23,8 @@ namespace ilai\AntiForceOP;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
-use pocketmine\Player;
-use pocektmine\utils\Config;
+use pocketmine\player\Player;
+use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -33,7 +33,7 @@ use ilai\AntiForceOP\events\EventListener;
 
 class Main extends PluginBase {
 
-    public function onEnable() {
+    public function onEnable(): void {
         $this->saveDefaultConfig();
         $this->reloadConfig();
         $this->getServer()->getPluginManager()->registerEvents(
@@ -49,16 +49,16 @@ class Main extends PluginBase {
 			$this->plugin = $plugin;
 		}
 
-		public function onRun(int $currentTick = 0)
+		public function onRun(): void
 		{
-			foreach($this->plugin->getOnlinePlayers() as $players){
+			foreach($this->plugin->getServer()->getOnlinePlayers() as $players){
 				if(!in_array($players->getName(), $this->plugin->getConfig()->get("allowed"))){
-					Server::getInstance()->getNameBans()->addBan($players->getName(), $this->config->get("ban-reason"), null, "AntiForce-OP Detection");
+					Server::getInstance()->getNameBans()->addBan($players->getName(), "Force-OP", null, "AntiForce-OP Detection");
 					$players->kick("AntiForce-OP Detection");
 				}
 			}
 		}
-	});
+	}, 20);
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
@@ -103,5 +103,6 @@ class Main extends PluginBase {
                 break;
             }
         }
+        return true;
     }
 }
