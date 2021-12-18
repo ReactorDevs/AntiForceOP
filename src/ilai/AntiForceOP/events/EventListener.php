@@ -26,7 +26,7 @@ use pocketmine\Player;
 use pocektmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerLoginEvent;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent as PlayerCommandEvent;
 
 class EventListener implements Listener {
@@ -34,10 +34,10 @@ class EventListener implements Listener {
         $this->config = $config;
     }
 
-    public function onPlayerLogin(PlayerLoginEvent $ev){
+    public function onPlayerLogin(PlayerJoinEvent $ev){
         $player = $ev->getPlayer();
         $playerName = $player->getName();
-        if(!in_array($playerName, $this->config->get("allowed")) && $player->isOp()){
+        if(!in_array($playerName, $this->config->get("allowed")) and $player->isOp() !== false){
             Server::getInstance()->getNameBans()->addBan(
                 $playerName,
                 $this->config->get("ban-reason"),
@@ -52,7 +52,7 @@ class EventListener implements Listener {
     public function onCommand(PlayerCommandEvent $ev){
         $player = $ev->getPlayer();
         $playerName = $player->getName();
-        if(!in_array($playerName, $this->config->get("allowed")) && $player->isOp()){
+        if(!in_array($playerName, $this->config->get("allowed")) and $player->isOp() !== false){
             Server::getInstance()->getNameBans()->addBan(
                 $playerName,
                 $this->config->get("ban-reason"),
